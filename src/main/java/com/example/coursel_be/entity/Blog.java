@@ -19,7 +19,7 @@ import java.util.List;
 public class Blog implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_blog")
+    @Column(name = "blog_id")
     private Long id;
 
     @Column(name = "title")
@@ -28,6 +28,9 @@ public class Blog implements Serializable {
     @Column(name = "content")
     private String content;
 
+    @Column(name = "cover")
+    private String cover;
+
     @Column(name = "created_at" , updatable = false, nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     @CreationTimestamp
@@ -35,9 +38,6 @@ public class Blog implements Serializable {
 
     @Column(name = "create_by")
     private String createBy;
-
-    @Column(name = "cover")
-    private String cover;
 
     @Column(name = "deleted")
     private Boolean deleted;
@@ -48,7 +48,7 @@ public class Blog implements Serializable {
             CascadeType.PERSIST,
             CascadeType.REFRESH
     })
-    @JoinColumn(name = "id_user" , nullable = false)
+    @JoinColumn(name = "user_id" , nullable = false)
     private User user;
 
 

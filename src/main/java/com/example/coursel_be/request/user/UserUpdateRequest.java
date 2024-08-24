@@ -1,5 +1,6 @@
 package com.example.coursel_be.request.user;
 
+import com.example.coursel_be.enums.Gender;
 import com.example.coursel_be.infrastructure.constant.EntityProperties;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
@@ -22,9 +23,7 @@ public class UserUpdateRequest {
 
     private String avatar;
 
-    @NotBlank(message = "Gender is required")
-    @Pattern(regexp = "^(Nam|Nữ)$", message = "Gender must be 'Nam' or 'Nữ'")
-    private String gender;
+    private Gender gender;
 
     @NotBlank(message = "Phone number is required")
     @Pattern(regexp = "^0\\d{9}$", message = "Invalid phone number format")

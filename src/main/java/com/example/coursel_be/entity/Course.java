@@ -21,13 +21,13 @@ import java.util.List;
 public class Course implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_course")
+    @Column(name = "course_id")
     private Long id;
 
     @Column(name = "coursel_title")
     private String title;
 
-    @Column(name = "coursel_description")
+    @Column(name = "description")
     private String description;
 
     @Column(name = "coursel_price")
@@ -36,20 +36,19 @@ public class Course implements Serializable {
     @Column(name = "coursel_cover")
     private String cover;
 
+    @Column(name = "create_by")
+    private String createBy;
+
+    @Column(name = "update_by")
+    private String updateBy;
+
     @Column(name = "created_at" , updatable = false , nullable = false)
     @CreationTimestamp
     private Date createdAt;
 
-    @Column(name = "create_by")
-    private String createBy;
-
-
     @Column(name = "update_at")
     @UpdateTimestamp
     private Date updateAt;
-
-    @Column(name = "update_by")
-    private String updateBy;
 
     @Column(name = "deleted")
     private Boolean deleted;
@@ -62,8 +61,8 @@ public class Course implements Serializable {
             CascadeType.REFRESH
     })
     @JoinTable(name = "enrolments_course",
-            joinColumns = @JoinColumn(name = "id_course"),
-            inverseJoinColumns = @JoinColumn(name = "id_enrolments"))
+            joinColumns = @JoinColumn(name = "course_id"),
+            inverseJoinColumns = @JoinColumn(name = "enrolments_id"))
     private List<Enrolments> listEnrolments;
 
 

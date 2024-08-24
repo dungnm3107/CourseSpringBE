@@ -16,10 +16,10 @@ import java.util.List;
 public class Role implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_role")
+    @Column(name = "role_id")
     private Long id;
 
-    @Column(name = "name_role")
+    @Column(name = "role_name")
     private String roleName;
 
     @ManyToMany(fetch = FetchType.LAZY , cascade = {
@@ -29,7 +29,7 @@ public class Role implements Serializable {
             CascadeType.REFRESH
     })
     @JoinTable(name = "user_role",
-            joinColumns = @JoinColumn(name = "id_role"),
-            inverseJoinColumns = @JoinColumn(name = "id_user"))
+            joinColumns = @JoinColumn(name = "role_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id"))
     private List<User> listUsers;
 }

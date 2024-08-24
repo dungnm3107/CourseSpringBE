@@ -18,7 +18,7 @@ public class Notification implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_notification")
+    @Column(name = "notification_id")
     private Long id;
 
     @Column(name = "message")
@@ -29,7 +29,7 @@ public class Notification implements Serializable {
     private Date createdDate;
 
     @ManyToOne
-    @JoinColumn(name = "id_user", nullable = false)
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
 }

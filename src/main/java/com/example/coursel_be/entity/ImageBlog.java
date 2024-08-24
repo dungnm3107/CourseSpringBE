@@ -31,7 +31,7 @@ public class ImageBlog implements Serializable {
             CascadeType.PERSIST,
             CascadeType.REFRESH
     })
-    @JoinColumn(name = "id_blog" , nullable = false)
+    @JoinColumn(name = "blog_id" , nullable = false)
     private Blog blog;
 
 

@@ -1,5 +1,6 @@
 package com.example.coursel_be.entity;
 
+import com.example.coursel_be.enums.PaymentMethod;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -18,7 +19,7 @@ import java.util.Date;
 public class PurchaseHistory implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_purchase")
+    @Column(name = "purchase_id")
     private Long id;
 
     @Column(name = "purchase_date")
@@ -29,7 +30,7 @@ public class PurchaseHistory implements Serializable {
     private BigDecimal purchaseAmount;
 
     @Column(name = "payment_method")
-    private String paymentMethod;
+    private PaymentMethod paymentMethod;
 
     @ManyToOne(cascade = {
             CascadeType.DETACH,
@@ -37,7 +38,7 @@ public class PurchaseHistory implements Serializable {
             CascadeType.PERSIST,
             CascadeType.REFRESH
     })
-    @JoinColumn(name = "id_user", nullable = false)
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     @ManyToOne(cascade = {
@@ -46,6 +47,6 @@ public class PurchaseHistory implements Serializable {
             CascadeType.PERSIST,
             CascadeType.REFRESH
     })
-    @JoinColumn(name = "id_course", nullable = false)
+    @JoinColumn(name = "course_id", nullable = false)
     private Course course;
 }

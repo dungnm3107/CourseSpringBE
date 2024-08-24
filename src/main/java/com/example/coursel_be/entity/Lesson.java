@@ -21,7 +21,7 @@ public class Lesson implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_lessons")
+    @Column(name = "lessons_id")
     private Long id;
 
     @Column(name = "lessons_title")
@@ -34,17 +34,17 @@ public class Lesson implements Serializable {
     @CreationTimestamp
     private Date createdAt;
 
-    @Column(name = "create_by")
-    private String createBy;
-
     @Column(name = "update_at")
     @UpdateTimestamp
     private Date updateAt;
 
+    @Column(name = "create_by")
+    private String createBy;
+
     @Column(name = "update_by")
     private String updateBy;
 
-    @Column(name = "lessons_video_url")
+    @Column(name = "lessons_vid_url")
     private String videoUrl;
 
     @Column(name = "lessons_sequence")

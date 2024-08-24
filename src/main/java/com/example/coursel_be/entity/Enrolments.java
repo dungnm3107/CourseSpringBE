@@ -18,7 +18,7 @@ import java.util.List;
 public class Enrolments implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_enrolments")
+    @Column(name = "enrolments_id")
     private Long id;
 
     @Column(name = "progress")
@@ -36,8 +36,8 @@ public class Enrolments implements Serializable {
             CascadeType.REFRESH
     })
     @JoinTable(name = "enrolments_course",
-            joinColumns = @JoinColumn(name = "id_enrolments"),
-            inverseJoinColumns = @JoinColumn(name = "id_course"))
+            joinColumns = @JoinColumn(name = "enrolments_id"),
+            inverseJoinColumns = @JoinColumn(name = "course_id"))
     private List<Course> listCourse;
 
 
@@ -47,7 +47,7 @@ public class Enrolments implements Serializable {
             CascadeType.PERSIST,
             CascadeType.REFRESH
     })
-    @JoinColumn(name = "id_user" , nullable = false)
+    @JoinColumn(name = "user_id" , nullable = false)
     private User user;
 
 }

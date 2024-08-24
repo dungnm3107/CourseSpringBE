@@ -1,5 +1,6 @@
 package com.example.coursel_be.entity;
 
+import com.example.coursel_be.enums.Gender;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -20,7 +21,7 @@ public class User implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_user")
+    @Column(name = "user_id")
     private Long id;
 
     @Column(name = "user_name")
@@ -29,25 +30,18 @@ public class User implements Serializable {
     @Column(name = "full_name")
     private String fullName;
 
-    @Column(name = "password")
-    private String password;
-
     @Column(name = "email")
     private String email;
 
-    @Column(name = "created_date" , updatable = false , nullable = false)
-    @CreationTimestamp
-    private Date createdDate;
+    @Column(name = "password")
+    private String password;
 
-    @Column(name = "updated_date")
-    @UpdateTimestamp
-    private Date updatedDate;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "gender")
+    private Gender gender;
 
     @Column(name = "avatar")
     private String avatar;
-
-    @Column(name="gender")
-    private String gender;
 
     @Column(name="phone")
     private String phone;
@@ -61,6 +55,13 @@ public class User implements Serializable {
     @Column(name="status")
     private Boolean isDeleted;
 
+    @Column(name = "created_date" , updatable = false , nullable = false)
+    @CreationTimestamp
+    private Date createdDate;
+
+    @Column(name = "updated_date")
+    @UpdateTimestamp
+    private Date updatedDate;
 
     @ManyToMany(fetch = FetchType.EAGER , cascade = {
             CascadeType.DETACH,
@@ -69,8 +70,8 @@ public class User implements Serializable {
             CascadeType.REFRESH
     })
     @JoinTable(name = "user_role",
-            joinColumns = @JoinColumn(name = "id_user"),
-            inverseJoinColumns = @JoinColumn(name = "id_role"))
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
     private List<Role> listRoles;
 
 
@@ -91,5 +92,8 @@ public class User implements Serializable {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Notification> notifications;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<SystemConfig> systemConfigs;
 
 }

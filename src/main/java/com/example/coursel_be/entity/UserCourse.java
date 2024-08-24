@@ -21,11 +21,11 @@ public class UserCourse implements Serializable {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_user")
+    @JoinColumn(name = "user_id")
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_course")
+    @JoinColumn(name = "course_id")
     private Course course;
 
     @Column(name = "status")

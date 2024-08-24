@@ -18,6 +18,7 @@ import java.util.List;
 public class Chapter {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "chapter_id")
     private Long id;
 
     @Column(name = "chapter_title")
@@ -26,7 +27,7 @@ public class Chapter {
     @Column(name = "chapter_sequence")
     private Integer chapterSequence;
 
-    @Column(name = "chapter_deleted")
+    @Column(name = "deleted")
     private Boolean deleted;
 
     @JsonManagedReference
