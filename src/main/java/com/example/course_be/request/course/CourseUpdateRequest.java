@@ -2,10 +2,7 @@ package com.example.course_be.request.course;
 
 import com.example.course_be.enums.CourseType;
 import com.example.course_be.infrastructure.constant.EntityProperties;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.PositiveOrZero;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,15 +17,16 @@ import java.math.BigDecimal;
 public class CourseUpdateRequest {
 
     private Long idCourse;
-
     @NotNull(message = "Id user create is not empty")
     private Long idUserUpdate;
 
-    @Size(min = EntityProperties.MAX_LENGTH_10, max = EntityProperties.MAX_LENGTH_50, message = "Title must be between 5 and 50 characters")
+    @Size(min = EntityProperties.MAX_LENGTH_10, max = EntityProperties.MAX_LENGTH_50,
+            message = "Title must be between 5 and 50 characters")
     @NotBlank(message = "Title is not empty")
     private String title;
 
-    @Size(min = EntityProperties.MAX_LENGTH_10, max = EntityProperties.MAX_LENGTH_225, message = "Description must be between 10 and 255 characters")
+    @Size(min = EntityProperties.MAX_LENGTH_10, max = EntityProperties.MAX_LENGTH_225,
+            message = "Description must be between 10 and 255 characters")
     @NotBlank(message = "Description is not empty")
     private String description;
 
@@ -40,5 +38,13 @@ public class CourseUpdateRequest {
     private CourseType courseType;
 
     private Boolean deleted;
+
+    @AssertTrue(message = "For free courses, the price must be 0.")
+    private boolean isCoursePriceValid() {
+        if (courseType == CourseType.FREE) {
+            return coursePrice != null && coursePrice.compareTo(BigDecimal.ZERO) == 0;
+        }
+        return true;
+    }
 
 }

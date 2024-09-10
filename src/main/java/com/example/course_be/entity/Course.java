@@ -54,8 +54,8 @@ public class Course implements Serializable {
     @UpdateTimestamp
     private Date updateAt;
 
-    @Column(name = "deleted")
-    private Boolean deleted;
+    @Column(name = "deleted", columnDefinition = "BOOLEAN DEFAULT FALSE")
+    private Boolean deleted = false;
 
 
     @ManyToMany(fetch = FetchType.LAZY , cascade = {
