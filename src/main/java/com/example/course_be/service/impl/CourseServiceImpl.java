@@ -51,16 +51,18 @@ public class CourseServiceImpl implements CourseService {
             if (existsByTitle) {
                 return "Course already exists";
             }
-
-            User user = userRepository.findById(courseRequest.getIdUserCreate()).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+            User user = userRepository.findById(courseRequest.getIdUserCreate()).orElseThrow(()
+                    -> new AppException(ErrorCode.USER_NOT_FOUND));
             Course course = getCourseFromRequest(courseRequest, user);
             courseRepository.save(course);
-            if(courseRequest != null){
-                String courseJson = objectMapper.writeValueAsString(courseRequest);
-                notificationProducerService.sendNotification(courseJson);
-                kafkaEmailProducerService.sendEmailNotification(courseJson);
-            }
-            return "Course saved successfully";
+//            if(courseRequest != null){
+//                String courseJson = objectMapper.writeValueAsString(courseRequest);
+//                notificationProducerService.sendNotification(courseJson);
+//                kafkaEmailProducerService.sendEmailNotification(courseJson);
+//            }
+
+            return "Course created successfully";
+
         } catch (Exception e) {
             throw new AppException(ErrorCode.COURSE_SAVE_ERROR);
         }
@@ -91,7 +93,8 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public String deleteCourseById(Long courseId) {
-        Optional<Course> course = Optional.ofNullable(courseRepository.findById(courseId).orElseThrow(() -> new AppException(ErrorCode.COURSE_NOT_FOUND)));
+        Optional<Course> course = Optional.ofNullable(courseRepository.findById(courseId).orElseThrow(()
+                -> new AppException(ErrorCode.COURSE_NOT_FOUND)));
         if (course.isPresent()) {
             courseRepository.delete(course.get());
             return "Course deleted successfully";
@@ -102,7 +105,8 @@ public class CourseServiceImpl implements CourseService {
     @Override
     @Transactional
     public String updateCourse(CourseUpdateRequest courseUpdateRequest) {
-        Optional<Course> existingCourse = Optional.ofNullable(courseRepository.findById(courseUpdateRequest.getIdCourse()).orElseThrow(() -> new AppException(ErrorCode.COURSE_NOT_FOUND)));
+        Optional<Course> existingCourse = Optional.ofNullable(courseRepository.findById(courseUpdateRequest.getIdCourse())
+                .orElseThrow(() -> new AppException(ErrorCode.COURSE_NOT_FOUND)));
         boolean existsByTitle = courseRepository.existsByTitle(courseUpdateRequest.getTitle());
 
         if (existingCourse.isEmpty()) {
@@ -124,7 +128,8 @@ public class CourseServiceImpl implements CourseService {
     @Override
     @Transactional
     public String changeStatusCourse(Long courseId) {
-        Optional<Course> course = Optional.ofNullable(courseRepository.findById(courseId).orElseThrow(() -> new AppException(ErrorCode.COURSE_NOT_FOUND)));
+        Optional<Course> course = Optional.ofNullable(courseRepository.findById(courseId).orElseThrow(()
+                -> new AppException(ErrorCode.COURSE_NOT_FOUND)));
         if (course.isPresent()) {
             course.get().setDeleted(!course.get().getDeleted());
             courseRepository.save(course.get());
@@ -138,8 +143,9 @@ public class CourseServiceImpl implements CourseService {
         course.setTitle(courseRequest.getTitle());
         course.setDescription(courseRequest.getDescription());
         course.setCoursePrice(courseRequest.getCoursePrice());
+        course.setCover(courseRequest.getCover());
         course.setCreateBy(user.getFullName());
-        course.setDeleted(true);
+        course.setDeleted(false);
         return course;
     }
 
@@ -151,7 +157,8 @@ public class CourseServiceImpl implements CourseService {
 
         Course courseToUpdate = existingCourse.get();
 
-        User user = userRepository.findById(courseUpdateRequest.getIdUserUpdate()).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+        User user = userRepository.findById(courseUpdateRequest.getIdUserUpdate()).orElseThrow(()
+                -> new AppException(ErrorCode.USER_NOT_FOUND));
         courseToUpdate.setUpdateBy(user.getFullName());
         if (courseUpdateRequest.getTitle() != null) {
             courseToUpdate.setTitle(courseUpdateRequest.getTitle());
@@ -167,6 +174,7 @@ public class CourseServiceImpl implements CourseService {
         if (courseUpdateRequest.getCover() != null) {
             courseToUpdate.setCover(courseUpdateRequest.getCover());
         }
+//        adaddChapter(courseUpdateRequest, courseToUpdate);
         return courseToUpdate;
     }
 
