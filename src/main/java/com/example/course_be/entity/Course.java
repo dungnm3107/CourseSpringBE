@@ -1,11 +1,11 @@
 package com.example.course_be.entity;
 
-
-
 import com.example.course_be.enums.CourseType;
+import com.google.api.client.json.JsonPolymorphicTypeMap;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.Type;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.io.Serializable;
@@ -54,8 +54,8 @@ public class Course implements Serializable {
     @UpdateTimestamp
     private Date updateAt;
 
-    @Column(name = "deleted")
-    private Boolean deleted;
+    @Column(name = "deleted", columnDefinition = "BOOLEAN DEFAULT FALSE")
+    private Boolean deleted = false;
 
 
     @ManyToMany(fetch = FetchType.LAZY , cascade = {

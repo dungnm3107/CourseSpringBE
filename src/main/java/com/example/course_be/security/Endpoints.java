@@ -6,8 +6,13 @@ public class Endpoints {
 
     public static final String[] PUBLIC_GET = {
             "/api/v1/user/profile",
+            "/api/v1/chapter",
             "/api/v1/course/all",
-            "/api/v1/lesson/get/**",
+            "/api/v1/course/free",
+            "/api/v1/course/paid",
+            "/api/v1/lesson",
+            "/api/v1/course/get/**",
+            "/api/v1/chapter/get/**",
     };
 
     public static final String[] PUBLIC_POST = {
@@ -18,14 +23,12 @@ public class Endpoints {
 
     public static final String[] ADMIN_POST = {
             "/api/v1/course/save",
-            "/api/v1/course/delete/**",
             "/api/v1/course/addUserToCourse",
             "/api/v1/lesson/save",
             "/api/v1/chapter/save",
     };
 
     public static final String[] ADMIN_GET = {
-            "/api/v1/course/get/**",
             "/api/v1/course/all",
             "/api/v1/user/allUsers",
             "/api/v1/user/**",
@@ -36,6 +39,11 @@ public class Endpoints {
             "/api/v1/course/changeStatus/**",
             "/api/v1/chapter/update",
             "/api/v1/lesson/update",
+    };
+    public static final String[] ADMIN_DELETE = {
+            "/api/v1/course/**",
+            "/api/v1/chapter/**",
+            "/api/v1/lesson/**",
     };
 
 

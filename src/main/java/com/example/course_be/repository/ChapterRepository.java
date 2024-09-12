@@ -10,5 +10,5 @@ import java.util.List;
 public interface ChapterRepository extends JpaRepository<Chapter, Long> {
     boolean existsByTitle(String title);
 
-    List<Chapter>findAllByCourseId(Long courseId);
+    List<Chapter>findAllByCourseId(Long Id);
 }

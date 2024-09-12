@@ -47,6 +47,7 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.GET, Endpoints.PUBLIC_GET).permitAll()
                         .requestMatchers(HttpMethod.POST, Endpoints.ADMIN_POST).hasAuthority("ADMIN")
                         .requestMatchers(HttpMethod.PUT, Endpoints.ADMIN_PUT).hasAuthority("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, Endpoints.ADMIN_DELETE).hasAuthority("ADMIN")
                         .requestMatchers(HttpMethod.GET, Endpoints.ADMIN_GET).hasAuthority("ADMIN")
                         .requestMatchers(HttpMethod.GET, Endpoints.CUSTOMER_GET).hasAuthority("CUSTOMER")
                         .requestMatchers(HttpMethod.POST, Endpoints.CUSTOMER_POST).hasAuthority("CUSTOMER")

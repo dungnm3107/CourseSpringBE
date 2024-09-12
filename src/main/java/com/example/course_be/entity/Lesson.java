@@ -50,8 +50,8 @@ public class Lesson implements Serializable {
     @Column(name = "lessons_sequence")
     private Integer lessonSequence;
 
-    @Column(name = "deleted")
-    private Boolean deleted;
+    @Column(name = "deleted", columnDefinition = "BOOLEAN DEFAULT FALSE")
+    private Boolean deleted = false;
 
     @OneToMany(mappedBy = "lessons", cascade = {
             CascadeType.DETACH,

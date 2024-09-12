@@ -2,10 +2,7 @@ package com.example.course_be.request.course;
 
 import com.example.course_be.enums.CourseType;
 import com.example.course_be.infrastructure.constant.EntityProperties;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.PositiveOrZero;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -41,5 +38,11 @@ public class CourseRequest {
 
     private Boolean deleted;
 
-
+    @AssertTrue(message = "For free courses, the price must be 0.")
+    private boolean isCoursePriceValid() {
+        if (courseType == CourseType.FREE) {
+            return coursePrice != null && coursePrice.compareTo(BigDecimal.ZERO) == 0;
+        }
+        return true;
+    }
 }

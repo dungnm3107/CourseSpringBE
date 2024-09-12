@@ -4,6 +4,7 @@ import com.example.course_be.entity.Chapter;
 import com.example.course_be.entity.Course;
 import com.example.course_be.entity.Notification;
 import com.example.course_be.entity.User;
+import com.example.course_be.enums.CourseType;
 import com.example.course_be.exceptions.AppException;
 import com.example.course_be.exceptions.ErrorCode;
 import com.example.course_be.repository.ChapterRepository;
@@ -55,11 +56,11 @@ public class CourseServiceImpl implements CourseService {
             User user = userRepository.findById(courseRequest.getIdUserCreate()).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
             Course course = getCourseFromRequest(courseRequest, user);
             courseRepository.save(course);
-            if(courseRequest != null){
-                String courseJson = objectMapper.writeValueAsString(courseRequest);
-                notificationProducerService.sendNotification(courseJson);
-                kafkaEmailProducerService.sendEmailNotification(courseJson);
-            }
+//            if(courseRequest != null){
+//                String courseJson = objectMapper.writeValueAsString(courseRequest);
+//                notificationProducerService.sendNotification(courseJson);
+//                kafkaEmailProducerService.sendEmailNotification(courseJson);
+//            }
             return "Course saved successfully";
         } catch (Exception e) {
             throw new AppException(ErrorCode.COURSE_SAVE_ERROR);
@@ -71,7 +72,8 @@ public class CourseServiceImpl implements CourseService {
         if (courseId == null) {
             throw new AppException(ErrorCode.COURSE_NOT_FOUND);
         }
-        Course course = courseRepository.findById(courseId).orElseThrow(() -> new AppException(ErrorCode.COURSE_NOT_FOUND));
+        Course course = courseRepository.findById(courseId).orElseThrow(()
+                -> new AppException(ErrorCode.COURSE_NOT_FOUND));
         return convertCourseToResponse(course);
     }
 
@@ -89,15 +91,41 @@ public class CourseServiceImpl implements CourseService {
     }
 
 
+    public List<CourseResponse> getAllFreeCourses() {
+        List<Course> freeCourses = courseRepository.findByCourseType(CourseType.FREE);
+        if (freeCourses.isEmpty()) {
+            throw new AppException(ErrorCode.COURSE_NOT_FOUND);
+        }
+        List<CourseResponse> freeCourseResponses = new ArrayList<>();
+        for (Course course : freeCourses) {
+            freeCourseResponses.add(convertCourseToResponseGetAll(course));
+        }
+        return freeCourseResponses;
+    }
+
+
+    public List<CourseResponse> getAllPaidCourses() {
+        List<Course> paidCourses = courseRepository.findByCourseType(CourseType.PAID);
+        if (paidCourses.isEmpty()) {
+            throw new AppException(ErrorCode.COURSE_NOT_FOUND);
+        }
+        List<CourseResponse> paidCourseResponses = new ArrayList<>();
+        for (Course course : paidCourses) {
+            paidCourseResponses.add(convertCourseToResponseGetAll(course));
+        }
+        return paidCourseResponses;
+    }
+
+
     @Override
     public String deleteCourseById(Long courseId) {
-        Optional<Course> course = Optional.ofNullable(courseRepository.findById(courseId).orElseThrow(() -> new AppException(ErrorCode.COURSE_NOT_FOUND)));
-        if (course.isPresent()) {
-            courseRepository.delete(course.get());
+    Course course = courseRepository.findById(courseId)
+                    .orElseThrow(() -> new AppException(ErrorCode.COURSE_NOT_FOUND));
+            course.setDeleted(true);
+            courseRepository.save(course);
             return "Course deleted successfully";
-        }
-        return "Course not found to delete";
     }
+
 
     @Override
     @Transactional
@@ -124,7 +152,8 @@ public class CourseServiceImpl implements CourseService {
     @Override
     @Transactional
     public String changeStatusCourse(Long courseId) {
-        Optional<Course> course = Optional.ofNullable(courseRepository.findById(courseId).orElseThrow(() -> new AppException(ErrorCode.COURSE_NOT_FOUND)));
+        Optional<Course> course = Optional.ofNullable(courseRepository.findById(courseId).orElseThrow(()
+                -> new AppException(ErrorCode.COURSE_NOT_FOUND)));
         if (course.isPresent()) {
             course.get().setDeleted(!course.get().getDeleted());
             courseRepository.save(course.get());
@@ -139,7 +168,8 @@ public class CourseServiceImpl implements CourseService {
         course.setDescription(courseRequest.getDescription());
         course.setCoursePrice(courseRequest.getCoursePrice());
         course.setCreateBy(user.getFullName());
-        course.setDeleted(true);
+        course.setCover(courseRequest.getCover());
+        course.setCourseType(courseRequest.getCourseType());
         return course;
     }
 
@@ -183,7 +213,7 @@ public class CourseServiceImpl implements CourseService {
         courseResponse.setUpdateBy(course.getUpdateBy());
         courseResponse.setCreatedAt(course.getCreatedAt());
         courseResponse.setUpdateAt(course.getUpdateAt());
-
+        courseResponse.setCourseType(course.getCourseType());
         courseResponse.setListChapter(listChapter);
         return courseResponse;
     }
@@ -196,6 +226,7 @@ public class CourseServiceImpl implements CourseService {
         courseResponse.setCoursePrice(course.getCoursePrice());
         courseResponse.setCreateBy(course.getCreateBy());
         courseResponse.setCover(course.getCover());
+        courseResponse.setCourseType(course.getCourseType());
         courseResponse.setDeleted(course.getDeleted());
         courseResponse.setUpdateBy(course.getUpdateBy());
         courseResponse.setCreatedAt(course.getCreatedAt());

@@ -23,11 +23,14 @@ public class Chapter {
     @Column(name = "chapter_title")
     private String title;
 
+    @Column(name = "description")
+    private String description;
+
     @Column(name = "chapter_sequence")
     private Integer chapterSequence;
 
-    @Column(name = "deleted")
-    private Boolean deleted;
+    @Column(name = "deleted", columnDefinition = "BOOLEAN DEFAULT FALSE")
+    private Boolean deleted = false;
 
     @JsonManagedReference
     @OneToMany(mappedBy = "chapter", cascade = CascadeType.ALL)

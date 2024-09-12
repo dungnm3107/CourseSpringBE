@@ -14,7 +14,8 @@ public class ChapterUpdateRequest {
     private Long idChapter;
     @NotNull(message = "Title is not empty")
     @Size(min = EntityProperties.MAX_LENGTH_5, max = EntityProperties.MAX_LENGTH_100, message = "Title must be between 5 and 100 characters")
-    private String title;
+    @NotNull private String title;
+    private String description;
     @NotNull(message = "Chapter sequence is required")
     private Integer chapterSequence;
     private Boolean deleted;

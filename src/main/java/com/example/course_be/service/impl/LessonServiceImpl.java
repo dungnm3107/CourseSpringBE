@@ -18,6 +18,7 @@ import com.example.course_be.service.NotificationProducerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -41,7 +42,7 @@ public class LessonServiceImpl implements LessonService {
                 Optional<User> user = Optional.ofNullable(userRepository.findById(lessonRequest.getIdUserCreate()).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND)));
                 Lesson lesson = getLesson(lessonRequest, chapter, user);
                 lessonRepository.save(lesson);
-                notificationProducerService.sendNotificationLesson("A new lesson '" + lesson.getTitle() + "' has been created.");
+//                notificationProducerService.sendNotificationLesson("A new lesson '" + lesson.getTitle() + "' has been created.");
                 return "Lesson saved successfully";
             } else {
                 return "Lesson already exists";
@@ -120,6 +121,38 @@ public class LessonServiceImpl implements LessonService {
 
     }
 
+    public List<LessonResponse> getAllLesson(){
+
+        List<Lesson> lessonList = lessonRepository.findAll();
+        if(lessonList.isEmpty()){
+            throw new AppException(ErrorCode.LESSON_NOT_FOUND);
+        }
+        List<LessonResponse> lessonResponseList = new ArrayList<>();
+        for(Lesson lesson : lessonList){
+            lessonResponseList.add(convertLessonToResponseGetAll(lesson));
+        }
+        return lessonResponseList;
+    }
+
+    @Override
+    public String deleteLessonById(Long lessonId) {
+        Lesson lesson = lessonRepository.findById(lessonId)
+                .orElseThrow(() -> new AppException(ErrorCode.LESSON_NOT_FOUND));
+        lesson.setDeleted(true);
+        lessonRepository.save(lesson);
+        return "Course deleted successfully";
+    }
+
+    public LessonResponse convertLessonToResponseGetAll(Lesson lesson){
+        LessonResponse lessonResponse = new LessonResponse();
+        lessonResponse.setIdLesson(lesson.getId());
+        lessonResponse.setTitle(lesson.getTitle());
+        lessonResponse.setContent(lesson.getContent());
+        lessonResponse.setVideoUrl(lesson.getVideoUrl());
+        lessonResponse.setLessonSequence(lessonResponse.getLessonSequence());
+        lessonResponse.setChapter(lesson.getChapter());
+        return lessonResponse;
+    }
 
     private Lesson getLesson(LessonRequest lessonRequest, Optional<Chapter> chapter, Optional<User> user) {
         if (chapter.isPresent() && user.isPresent()) {
@@ -131,7 +164,7 @@ public class LessonServiceImpl implements LessonService {
             lesson.setCreateBy(user.get().getFullName());
             lesson.setUpdateBy(user.get().getFullName());
             lesson.setVideoUrl(lessonRequest.getVideoUrl());
-            lesson.setDeleted(true);
+            lesson.setDeleted(false);
             return lesson;
         } else {
             throw new AppException(ErrorCode.UNCATEGORIZED);

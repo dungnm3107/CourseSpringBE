@@ -5,7 +5,6 @@ import com.example.course_be.service.LessonService;
 import com.example.course_be.service.NotificationConsumerService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
 @Slf4j
@@ -25,14 +24,14 @@ public class NotificationConsumerServiceImpl implements NotificationConsumerServ
     }
 
     @Override
-    @KafkaListener(topics = "general-notification-topic" , groupId = "notification-group")
+//    @KafkaListener(topics = "general-notification-topic" , groupId = "notification-group")
     public void listenNotification(String message) {
         courseService.saveNotificationForAllUsers(message);
         log.info("Send all notification user");
     }
 
     @Override
-    @KafkaListener(topics = "lesson-notification-topic" , groupId = "notification-group")
+//    @KafkaListener(topics = "lesson-notification-topic" , groupId = "notification-group")
     public void listenNotificationLesson(String message) {
        lessonService.saveNotificationLessonForAllUsers(message);
          log.info("Send all notification lesson");

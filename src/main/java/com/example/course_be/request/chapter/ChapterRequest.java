@@ -15,7 +15,8 @@ public class ChapterRequest {
     private Long courseId;
     @NotNull(message = "Title is not empty")
     @Size(min = EntityProperties.MAX_LENGTH_5, max = EntityProperties.MAX_LENGTH_100, message = "Title must be between 5 and 100 characters")
-    private String title;
+    @NotNull private String title;
+    private String description;
     private Integer chapterSequence;
     private Boolean deleted;
 }
